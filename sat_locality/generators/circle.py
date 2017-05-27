@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Writes out CNF formula of random localized SAT instances in DIMACS format.
 
 Distributes n variables uniformly randomly around a circle, then generates m
@@ -9,10 +8,6 @@ distance w.
 import sys
 import argparse
 import random
-from signal import signal, SIGPIPE, SIG_DFL
-
-__version__ = '0.0.1'
-signal(SIGPIPE, SIG_DFL)
 
 
 class Variable():
@@ -26,9 +21,8 @@ class Variable():
 
 
 def write_header(n, m, k, w):
-    """write DIMACS header. Record n, m, k, and w in comments"""
+    """write DIMACS header. Record generator, n, m, k, and w"""
     print('c generator: circle')
-    print('c version: ' + __version__)
     print('c k: ' + str(k))
     print('c w: ' + str(w))
     print('p cnf {} {}'.format(n, m))
@@ -55,12 +49,9 @@ def write_clauses(vars, m, k, w):
         sys.stdout.write(' '.join([str(i) for i in clause]) + ' 0\n')
 
 
-if __name__ == "__main__":
+def main():
     # cli options
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('-v', '--version', action='version',
-                        version='%(prog)s {version}'.format(
-                            version=__version__))
     parser.add_argument('-n', '--variables', type=int, default=100000,
                         help='number of variables')
     parser.add_argument('-m', '--clauses', type=int, default=100000,
@@ -75,3 +66,7 @@ if __name__ == "__main__":
     write_header(args.variables, args.clauses, args.arity, args.width)
     vars = build_vars(args.variables)
     write_clauses(vars, args.clauses, args.arity, args.width)
+
+
+if __name__ == "__main__":
+    main()

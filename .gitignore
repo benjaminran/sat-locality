@@ -1,2 +1,9 @@
-**/__pycache__
+# SAT
 **/*.cnf
+
+# python
+**/__pycache__
+*.pyc
+/dist/
+/*.egg-info
+/venv/
