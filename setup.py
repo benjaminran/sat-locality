@@ -1,5 +1,11 @@
 from setuptools import setup
 
+
+def readme():
+    with open('README.rst') as f:
+        return f.read()
+
+
 setup(name='sat_locality',
       version='0.0.1',
       description='An experiment on SAT instance locality',
