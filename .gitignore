@@ -1,5 +1,7 @@
 # SAT
 **/*.cnf
+experiment
+archive
 
 # python
 **/__pycache__

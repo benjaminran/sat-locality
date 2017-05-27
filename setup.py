@@ -8,7 +8,12 @@ setup(name='sat_locality',
       author_email='benjaminran2@gmail.com',
       license='MIT',
       packages=['sat_locality'],
-      entry_points = {
-          'console_scripts': ['sl=sat-locality.runner:main'],
-      }
+      install_requires=[
+          'numpy',
+          'delegator.py',
+          'matplotlib'
+      ],
+      entry_points={
+          'console_scripts': ['sl=sat_locality.runner:main'],
+      },
       zip_safe=False)
