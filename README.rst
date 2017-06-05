@@ -14,6 +14,10 @@ Overview
 
 For variables uniformly randomly distributed around a circle, clauses are generated such that variables in the clause are within a certain "width" along the circle from a randomly chosen "center" specific to that clause. Variables are inverted with 50% probability.
 
+Run with ::
+
+  rm -r experiment; nohup sl -n 10000 -m 100000 >/tmp/sl.out 2>&1 && cp experiment "archive/experiment-$(date +%Y-%m-%d-%H:%M:%S)" &
+
 Example
 ^^^^^^^
 

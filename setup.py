@@ -20,6 +20,6 @@ setup(name='sat_locality',
           'matplotlib'
       ],
       entry_points={
-          'console_scripts': ['sl=sat_locality.runner:main'],
+          'console_scripts': ['sl=sat_locality.circle:main'],
       },
       zip_safe=False)
