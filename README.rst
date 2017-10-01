@@ -9,7 +9,10 @@ Set Up
 
 ::
 
-  pip install -e .
+  virtualenv -p python3 venv && source venv/bin/activate
+  pip3 install -e .
+  pip3 install jupyter pandas matplotlib
+  brew install parallel  # notebook uses gnu parallel
 
 
 Run Me

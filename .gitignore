@@ -1,6 +1,6 @@
 # SAT
 **/*.cnf
-experiment
+experiments
 archive
 
 # python
