@@ -15,9 +15,7 @@ setup(name='sat_locality',
       license='MIT',
       packages=['sat_locality'],
       install_requires=[
-          'numpy',
-          'delegator.py',
-          'matplotlib'
+          'numpy'
       ],
       entry_points={
           'console_scripts': ['sl=sat_locality.circle:main'],

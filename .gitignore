@@ -9,3 +9,7 @@ archive
 /dist/
 /*.egg-info
 /venv/
+
+### JupyterNotebook ###
+.ipynb_checkpoints
+≠*/.ipynb_checkpoints/*
