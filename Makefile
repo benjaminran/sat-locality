@@ -8,7 +8,7 @@ interactive:
 	jupyter notebook notebooks/Circle.ipynb
 
 clean:
-	- rm -r sat_locality.egg-info
+	- rm -r notebooks/data
 
 spotless: clean
-	- rm -r experiments/*
+	- rm -r experiments/* sat_locality.egg-info

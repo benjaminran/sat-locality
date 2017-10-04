@@ -10,19 +10,9 @@ import logging
 import argparse
 import numpy as np
 from signal import signal, SIGPIPE, SIG_DFL
-import cProfile
+import bisect
 
 signal(SIGPIPE, SIG_DFL)
-
-
-class Variable():
-    """
-    number: variable identifier
-    bearing: [0, 1) bearing clockwise from north
-    """
-    def __init__(self, number, bearing):
-        self.number = number
-        self.bearing = bearing
 
 
 def buffered_random(s=1000000):
@@ -68,11 +58,9 @@ def write_header(outfile, n, m, k, w):
 
 
 def build_vars(n):
-    """return list of n Variables with random bearing"""
-    logging.debug("generating {} variables with random bearing".format(n))
-    indices = range(1, n + 1)
-    bearings = np.random.uniform(size=n)
-    return [Variable(indices[i], bearings[i]) for i in range(n)]
+    """return list of n random bearings"""
+    logging.debug("generating {} random bearings".format(n))
+    return sorted(np.random.uniform(size=n))
 
 
 def write_clauses(outfile, vars, m, k, w):
@@ -81,24 +69,29 @@ def write_clauses(outfile, vars, m, k, w):
     rand = buffered_random()
     logging.debug("writing clauses")
     for c in range(m):
-        clause_vars = []
-        while len(clause_vars) == 0:
-            center = next(rand)
-            legal_vars = [v for v in vars if abs(v.bearing - center) < w
-                          or 1 - abs(v.bearing - center) < w]
-            clause_vars = [v.number for v in np.random.choice(
-                legal_vars, size=(k,), replace=False)]
-        clause = [(-1 if next(rand) < 0.5 else 1) * i for i in clause_vars]
+        center = next(rand)
+
+        lo = bisect.bisect_left(vars, (center - w) % 1)
+        hi = bisect.bisect_right(vars, (center + w) % 1)
+        if w >= 0.5: lo, hi = 0, len(vars)
+        
+        legal_indices = None
+        if hi < lo:  # crosses edge
+            legal_indices = [i for i in range(0, hi)] + [i for i in range(lo, len(vars))]
+        else:
+            legal_indices = [i for i in range(lo, hi)]
+        clause_indices = np.random.choice(legal_indices, size=(k,), replace=False)
+        clause = [(-1 if next(rand) < 0.5 else 1) * (i + 1) for i in clause_indices]
         outfile.write(' '.join([str(i) for i in clause]) + ' 0\n')
 
 
 def generate(args):
     # main routine
-    with open(
-            args.output, 'w') if args.output is not None else sys.stdout as f:
-        write_header(f, args.variables, args.clauses, args.arity, args.width)
-        vars = build_vars(args.variables)
-        write_clauses(f, vars, args.clauses, args.arity, args.width)
+    f = open(args.output, 'w') if args.output is not None else sys.stdout
+    write_header(f, args.variables, args.clauses, args.arity, args.width)
+    vars = build_vars(args.variables)
+    write_clauses(f, vars, args.clauses, args.arity, args.width)
+    if args.output is not None: f.close()
 
 
 def main():
@@ -121,7 +114,8 @@ def main():
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.WARNING)
     # generate
-    if args.profile:
-        cProfile.runctx('generate(args)', globals(), locals())
-    else:
-        generate(args)
+    generate(args)
+
+
+if __name__ == "__main__":
+    main()

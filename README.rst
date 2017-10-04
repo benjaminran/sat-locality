@@ -20,7 +20,7 @@ Run Me
 
 Uninteractively ::
 
-  jupyter nbconvert --to html --execute notebooks/Circle.ipynb
+  SL_A=<arity> SL_M=<clauses> SL_N=<vars> make bg
 
 
 Interactively ::

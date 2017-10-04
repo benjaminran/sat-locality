@@ -2,6 +2,7 @@
 **/*.cnf
 experiments
 archive
+data
 
 # python
 **/__pycache__
